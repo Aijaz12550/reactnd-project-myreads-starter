@@ -1,46 +1,19 @@
 import React from 'react'
-import * as BooksAPI from '../BooksAPI'
 import Book from './book'
 
 class Search extends React.Component {
 
     state = {
-        query:'',
-        //searchedBookList:[]
+        query:''
     }
-
-    
-    /*
-    handleClick() {
-        console.log("props",this.props);
-        this.props.history.replace("/")
-    }
-    */
 
     updateQuery(query) {
         this.setState(()=>({
             query: query
-        }));
-        
+        }));        
         this.props.serachBooks(query);
-        
     }
-    /*
-    searchBook(){
-        BooksAPI.update(book,shelf)
-        .then(data=>{
-            console.log("book update> ",data);
-            this.setState((prevState)=> ({
-                booksList : prevState.booksList.map(b=> {
-                    if(b.id === book.id){
-                        b.shelf = shelf;
-                    }
-                    return b;
-                })
-            }));
-        });
-    }*/
-
+    
     render() {
         const { query } = this.state;
         const { searchedBookList} = this.props;
@@ -67,9 +40,7 @@ class Search extends React.Component {
                 </div>
                 
                 <div className="search-books-results">
-                {JSON.stringify(this.state.query)}
                     <ol className="books-grid">
-                    
                         { searchedBookList.map((book,index) => {
                             return <Book key={index} book={book}  onUpdateShelf={this.props.onUpdateShelf}/>
                         })}

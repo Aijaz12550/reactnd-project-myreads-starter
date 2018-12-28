@@ -15,7 +15,6 @@ class BooksApp extends React.Component {
 
     componentDidMount(){
         BooksAPI.getAll().then(data=> {
-            console.log("Data > ", data);
             this.setState({booksList:data});
         })
     }
@@ -27,12 +26,9 @@ class BooksApp extends React.Component {
     }
 
     updateShelf (book, shelf){
-        console.log("state here",this.state);
         BooksAPI.update(book,shelf)
         .then(data=>{
-            console.log("book update> ",data);
-            
-            if(this.state.booksList.some(b=> b.id==book.id)){
+            if(this.state.booksList.some(b=> b.id===book.id)){
                 this.setState((prevState)=> ({
                     booksList : prevState.booksList.map(b=> {
                         if(b.id === book.id){
@@ -55,7 +51,6 @@ class BooksApp extends React.Component {
         if(query){            
             BooksAPI.search(query)
             .then(data=> {
-                console.log("search result ",data);
                 this.setState(()=>({
                     searchedBookList : data.error? []: data.map(b=> {                        
                         var matchedBook = this.state.booksList.filter(bl=> bl.id===b.id);
@@ -94,7 +89,7 @@ class BooksApp extends React.Component {
             </div>
         );
     }
-      
+
 }
 
 export default BooksApp

@@ -11,9 +11,7 @@ class Book extends React.Component {
         shelf: null
     }
     handleChange = (event) => {
-        console.log("chagne > ",event.target.value);
         this.setState({ shelf: event.target.value });
-
         this.props.onUpdateShelf(this.props.book,event.target.value);
     };
     
