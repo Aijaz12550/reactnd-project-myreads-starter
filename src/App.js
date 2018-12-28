@@ -52,14 +52,12 @@ class BooksApp extends React.Component {
     }
     
     serachBooks(query) {
-        if(query){
-            
+        if(query){            
             BooksAPI.search(query)
             .then(data=> {
                 console.log("search result ",data);
                 this.setState(()=>({
-                    searchedBookList : data.error? []: data.map(b=> {
-                        
+                    searchedBookList : data.error? []: data.map(b=> {                        
                         var matchedBook = this.state.booksList.filter(bl=> bl.id===b.id);
                         if(matchedBook && matchedBook.length>0){
                             b.shelf = matchedBook[0].shelf;
@@ -77,8 +75,7 @@ class BooksApp extends React.Component {
         }
     }
 
-    render() {
-        
+    render() {        
         return (
             <div>
                 <Router history={history}>
@@ -93,12 +90,11 @@ class BooksApp extends React.Component {
                             }} />
                         )} />
                     </Switch>
-                </Router>
-                
+                </Router>                
             </div>
         );
     }
-  
+      
 }
 
 export default BooksApp
