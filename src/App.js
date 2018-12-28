@@ -20,49 +20,60 @@ class BooksApp extends React.Component {
         })
     }
 
+    clearSearchResult(){
+        this.setState(()=>({
+            searchedBookList: []
+        }));
+    }
+
     updateShelf (book, shelf){
-        
+        console.log("state here",this.state);
         BooksAPI.update(book,shelf)
         .then(data=>{
             console.log("book update> ",data);
-            /*
-            var newBook = this.state.booksList.filter(b=>{
-                return b.id === book.id;
-            });
-            if(newBook.length>0){
-                this.setState ((prevState)=> ({
-                    booksList : prevState.booksList.push(newBook[0])
+            
+            if(this.state.booksList.some(b=> b.id==book.id)){
+                this.setState((prevState)=> ({
+                    booksList : prevState.booksList.map(b=> {
+                        if(b.id === book.id){
+                            b.shelf = shelf;
+                        }
+                        return b;
+                    })
                 }));
-            }*/
-            this.setState((prevState)=> ({
-                booksList : prevState.booksList.map(b=> {
-                    if(b.id === book.id){
-                        b.shelf = shelf;
-                    }
-                    return b;
-                })
-            }));
+            }
+            else {
+                book.shelf = shelf;
+                this.setState((prevState)=> ({
+                    booksList : [...prevState.booksList,book]
+                }));
+            }            
         });
     }
-
     
     serachBooks(query) {
         if(query){
+            
             BooksAPI.search(query)
             .then(data=> {
                 console.log("search result ",data);
                 this.setState(()=>({
                     searchedBookList : data.error? []: data.map(b=> {
-                        b.shelf = "none";
+                        
+                        var matchedBook = this.state.booksList.filter(bl=> bl.id===b.id);
+                        if(matchedBook && matchedBook.length>0){
+                            b.shelf = matchedBook[0].shelf;
+                        }
+                        else {
+                            b.shelf = "none";
+                        }
                         return b;
                     })
                 }))
             })
         }
         else {
-            this.setState(()=>({
-                searchedBookList: []
-            }));
+           this.clearSearchResult();
         }
     }
 
@@ -77,9 +88,7 @@ class BooksApp extends React.Component {
                         )} />
                         <Route path="/search" render={({history})=> (
                             <Search searchedBookList={this.state.searchedBookList} serachBooks={this.serachBooks.bind(this)} onUpdateShelf={this.updateShelf.bind(this)} onBackPress={()=> {
-                                this.setState(()=>({
-                                    searchedBookList: []
-                                }));
+                                this.clearSearchResult();
                                 history.push("/");
                             }} />
                         )} />
