@@ -25,6 +25,10 @@ class BooksApp extends React.Component {
         }));
     }
 
+    /*
+        This functions will be used to update the book and will be passed to two components 
+        Bookshelves and Search, both of these components will further pass it to Book component
+     */
     updateShelf (book, shelf){
         BooksAPI.update(book,shelf)
         .then(data=>{
@@ -47,6 +51,10 @@ class BooksApp extends React.Component {
         });
     }
     
+    /*
+        This function will be passed to search component and will be called by search component to 
+        find books, also we need to match book category in both searched and current books 
+    */
     serachBooks(query) {
         if(query){            
             BooksAPI.search(query)
