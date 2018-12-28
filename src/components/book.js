@@ -1,8 +1,12 @@
 import React from 'react'
-import * as BooksAPI from '../BooksAPI'
+import PropTypes from 'prop-types';
 
 class Book extends React.Component {
     
+    static propTypes = {
+        book: PropTypes.object.isRequired,
+        onUpdateShelf: PropTypes.func.isRequired
+    }
     state = {
         shelf: null
     }
@@ -10,7 +14,7 @@ class Book extends React.Component {
         console.log("chagne > ",event.target.value);
         this.setState({ shelf: event.target.value });
 
-        this.props.updateBookShelf(this.props.book,event.target.value);
+        this.props.onUpdateShelf(this.props.book,event.target.value);
     };
     
     render() {
@@ -19,7 +23,7 @@ class Book extends React.Component {
             <li>
                 <div className="book">
                     <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage:  `url("${book.imageLinks.thumbnail}")` }}></div>
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage:  `url("${book.imageLinks && book.imageLinks.thumbnail?book.imageLinks.thumbnail:''}")` }}></div>
                     <div className="book-shelf-changer">
                         <select onChange={this.handleChange.bind(this)} value={book.shelf}>
                         <option value="move" disabled>Move to...</option>
@@ -31,7 +35,7 @@ class Book extends React.Component {
                     </div>
                     </div>
                     <div className="book-title">{book.title}</div>
-                    <div className="book-authors">{book.authors.map(author=>author)}</div>
+                    <div className="book-authors">{ book.authors && book.authors.map(author=>author+", ")}</div>
                 </div>
                 </li>
         )
